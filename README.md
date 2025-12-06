@@ -40,6 +40,26 @@ The project is structured with a modern stack and clear separation of concerns, 
 
 ---
 
+## Screenshots
+
+### Home
+
+![Home](assets/Home.png)
+
+### Play (Game)
+
+![Play](assets/Play.png)
+
+### Learn
+
+![Learn](assets/Learn.png)
+
+### Dataset Gallery
+
+![Dataset](assets/Dataset.png)
+
+---
+
 ## **Features**
 
 ### 🎮 **Two Player Memory Game**
@@ -148,6 +168,119 @@ backend/
 - Public dataset gallery
 
 ---
+
+## Install & Run
+
+### Prerequisites
+
+- Python 3.10+
+- Node.js 18+ and npm
+- (Optional) `python3-venv` package on Linux
+
+### Backend (FastAPI) — `backend/`
+
+Install:
+
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+Run:
+
+```bash
+uvicorn app.main:app --reload --app-dir .
+```
+
+- API base: `http://localhost:8000`
+- Health: `GET /health`
+- Datasets: `POST /datasets`, `GET /datasets`, `GET /datasets/{id}`
+- Static files (original + Fourier images): served from `/static`
+
+Config (env):
+
+- `FOURIER_DATA_DIR` — dataset storage (default `backend/data`)
+- `FOURIER_STATIC_URL_PREFIX` — static mount path (default `/static`)
+- `FOURIER_DEBUG` — debug logging (default `true`)
+
+Data layout:
+
+```
+backend/data/
+  {dataset_id}/
+    meta.json
+    original/
+      *.png|jpg
+    fourier/
+      *_fft.png
+```
+
+Tests:
+
+```bash
+cd backend
+PYTHONPATH=. pytest
+```
+
+### Frontend (Next.js 14 + Tailwind) — `frontend/`
+
+Install:
+
+```bash
+cd frontend
+npm install
+```
+
+Configure backend URL (if not `http://localhost:8000`):
+
+```bash
+export NEXT_PUBLIC_API_BASE_URL="http://localhost:8000"
+```
+
+Dev server:
+
+```bash
+npm run dev
+```
+
+- Serves at `http://localhost:3000`
+
+Build / start:
+
+```bash
+npm run build
+npm start
+```
+
+Routes:
+
+- `/` — landing
+- `/datasets` — gallery
+- `/game/[datasetId]` — two-player game
+- `/learn/[datasetId]` — learn view
+- `/upload` — dataset upload
+
+### End-to-end (local)
+
+1. Start backend: `cd backend && source .venv/bin/activate && uvicorn app.main:app --reload --app-dir .`
+2. Start frontend: `cd frontend && npm run dev`
+3. Open `http://localhost:3000/upload`, upload PNG/JPG files.
+4. Play via `/game/{datasetId}` or learn via `/learn/{datasetId}`; list at `/datasets`.
+
+### Troubleshooting
+
+- 404 on datasets: backend not running or `NEXT_PUBLIC_API_BASE_URL` misconfigured.
+- Missing images: check `backend/data/` and that `/static` is mounted.
+- FFT errors: ensure `numpy` / `Pillow` installed in backend venv.
+
+### Shortcuts / scripts
+
+- Backend dev: `uvicorn app.main:app --reload --app-dir .`
+- Backend tests: `PYTHONPATH=. pytest`
+- Frontend dev: `npm run dev`
+- Frontend build: `npm run build && npm start`
 
 ## **License**
 

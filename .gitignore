@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Node
+frontend/node_modules/
+frontend/.next/
+frontend/.turbo/
+frontend/.swc/
+
+# Environment / secrets
+.env
+*.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.production.local
+backend/.env
+
+# Logs
+*.log
+
+# Data
+backend/data/
+
+# Editor
+.DS_Store
+.idea/
+.vscode/
+
